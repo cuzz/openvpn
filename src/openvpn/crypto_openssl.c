@@ -327,7 +327,7 @@ show_available_ciphers ()
 
   /* If we ever exceed this, we must be more selective */
   const size_t cipher_list_len = 1000;
-  const EVP_CIPHER *cipher_list[cipher_list_len];
+  const EVP_CIPHER *cipher_list[1000];
   size_t num_ciphers = 0;
 #ifndef ENABLE_SMALL
   printf ("The following ciphers and cipher modes are available\n"
@@ -795,11 +795,46 @@ md_ctx_init (EVP_MD_CTX *ctx, const EVP_MD *kt)
   EVP_DigestInit(ctx, kt);
 }
 
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
 void
 md_ctx_cleanup(EVP_MD_CTX *ctx)
 {
   EVP_MD_CTX_cleanup(ctx);
 }
+#else
+void
+md_ctx_cleanup(EVP_MD_CTX *ctx)
+{
+#ifndef OPENSSL_FIPS
+    /*
+     * Don't assume ctx->md_data was cleaned in EVP_Digest_Final, because
+     * sometimes only copies of the context are ever finalised.
+     */
+    if (ctx->digest && ctx->digest->cleanup
+        && !EVP_MD_CTX_test_flags(ctx, EVP_MD_CTX_FLAG_CLEANED))
+        ctx->digest->cleanup(ctx);
+    if (ctx->digest && ctx->digest->ctx_size && ctx->md_data
+        && !EVP_MD_CTX_test_flags(ctx, EVP_MD_CTX_FLAG_REUSE)) {
+        OPENSSL_cleanse(ctx->md_data, ctx->digest->ctx_size);
+        OPENSSL_free(ctx->md_data);
+    }
+#endif
+    if (ctx->pctx)
+        EVP_PKEY_CTX_free(ctx->pctx);
+#ifndef OPENSSL_NO_ENGINE
+    if (ctx->engine)
+        /*
+         * The EVP_MD we used belongs to an ENGINE, release the functional
+         * reference we held for this reason.
+         */
+        ENGINE_finish(ctx->engine);
+#endif
+#ifdef OPENSSL_FIPS
+    FIPS_md_ctx_cleanup(ctx);
+#endif
+    memset(ctx, '\0', sizeof *ctx);
+}
+#endif
 
 int
 md_ctx_size (const EVP_MD_CTX *ctx)
@@ -829,6 +864,7 @@ md_ctx_final (EVP_MD_CTX *ctx, uint8_t *dst)
  */
 
 
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
 void
 hmac_ctx_init (HMAC_CTX *ctx, const uint8_t *key, int key_len,
     const EVP_MD *kt)
@@ -849,6 +885,34 @@ hmac_ctx_cleanup(HMAC_CTX *ctx)
 {
   HMAC_CTX_cleanup (ctx);
 }
+#else
+void
+hmac_ctx_init (HMAC_CTX *ctx, const uint8_t *key, int key_len,
+    const EVP_MD *kt)
+{
+  ASSERT(NULL != kt && NULL != ctx);
+
+  CLEAR(*ctx);
+
+  HMAC_CTX_reset(ctx);
+  HMAC_Init_ex (ctx, key, key_len, kt, NULL);
+
+  /* make sure we used a big enough key */
+  ASSERT (HMAC_size (ctx) <= key_len);
+}
+
+void hmac_ctx_cleanup(HMAC_CTX *ctx)
+{
+    EVP_MD_CTX_reset(ctx->i_ctx);
+    EVP_MD_CTX_reset(ctx->o_ctx);
+    EVP_MD_CTX_reset(ctx->md_ctx);
+    ctx->md = NULL;
+    ctx->key_length = 0;
+    OPENSSL_cleanse(ctx->key, sizeof(ctx->key));
+}
+
+#endif
+
 
 int
 hmac_ctx_size (const HMAC_CTX *ctx)

@@ -182,10 +182,25 @@ openvpn_main (int argc, char *argv[])
 #endif
 
 	  /* initialize options to default state */
+
 	  init_options (&c.options, true);
+
+	  /*
+		c.options.log = true;
+		c.options.verbosity=6;
+		c.options.mute =0;
+      redirect_stdout_stderr ("client.log", false);
+	  */
 
 	  /* parse command line options, and read configuration file */
 	  parse_argv (&c.options, argc, argv, M_USAGE, OPT_P_DEFAULT, NULL, c.es);
+
+	  /*
+	    c.options.log = true;
+		c.options.verbosity=6;
+		c.options.mute =0;
+      redirect_stdout_stderr ("client.log", false);
+	  */
 
 #ifdef ENABLE_PLUGIN
 	  /* plugins may contribute options configuration */
@@ -319,13 +334,13 @@ wmain (int argc, wchar_t *wargv[]) {
   int ret;
   int i;
 
-  if ((argv = calloc(argc+1, sizeof(char*))) == NULL)
+  if ((argv = (char **)calloc(argc+1, sizeof(char*))) == NULL)
     return 1;
 
   for (i = 0; i < argc; i++)
     {
       int n = WideCharToMultiByte (CP_UTF8, 0, wargv[i], -1, NULL, 0, NULL, NULL);
-      argv[i] = malloc (n);
+      argv[i] = (char *)malloc (n);
       WideCharToMultiByte (CP_UTF8, 0, wargv[i], -1, argv[i], n, NULL, NULL);
     }
 

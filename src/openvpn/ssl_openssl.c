@@ -51,6 +51,7 @@
 #endif
 
 #include "ssl_verify_openssl.h"
+#include "openssl-1.1-compat.h"
 
 #include <openssl/err.h>
 #include <openssl/pkcs12.h>
@@ -270,6 +271,16 @@ tls_ctx_set_options (struct tls_root_ctx *ctx, unsigned int ssl_flags)
 void
 tls_ctx_restrict_ciphers(struct tls_root_ctx *ctx, const char *ciphers)
 {
+  size_t begin_of_cipher, end_of_cipher;
+
+  const char *current_cipher;
+  size_t current_cipher_len;
+
+  const tls_cipher_name_pair *cipher_pair;
+
+  char openssl_ciphers[4096]={0};
+  size_t openssl_ciphers_len = 0;
+
   if (ciphers == NULL)
     {
       /* Use sane default TLS cipher list */
@@ -283,17 +294,6 @@ tls_ctx_restrict_ciphers(struct tls_root_ctx *ctx, const char *ciphers)
 	crypto_msg (M_FATAL, "Failed to set default TLS cipher list.");
       return;
     }
-
-  size_t begin_of_cipher, end_of_cipher;
-
-  const char *current_cipher;
-  size_t current_cipher_len;
-
-  const tls_cipher_name_pair *cipher_pair;
-
-  char openssl_ciphers[4096];
-  size_t openssl_ciphers_len = 0;
-  openssl_ciphers[0] = '\0';
 
   ASSERT(NULL != ctx);
 
@@ -810,9 +810,14 @@ tls_ctx_use_external_private_key (struct tls_root_ctx *ctx,
       goto err;
     }
 
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
   /* get the public key */
   ASSERT(cert->cert_info->key->pkey); /* NULL before SSL_CTX_use_certificate() is called */
   pub_rsa = cert->cert_info->key->pkey->pkey.rsa;
+#else
+  ASSERT(cert->cert_info.key->pkey); /* NULL before SSL_CTX_use_certificate() is called */
+  pub_rsa = cert->cert_info.key->pkey->pkey.rsa;
+#endif
 
   /* initialize RSA object */
   rsa->n = BN_dup(pub_rsa->n);

@@ -108,6 +108,8 @@
 #include "packet_id.h"
 #include "mtu.h"
 
+#include "openssl-1.1-compat.h"
+
 /*
  * Defines a key type and key length for both cipher and HMAC.
  */

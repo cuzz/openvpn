@@ -628,8 +628,12 @@ x509_verify_crl(const char *crl_file, X509 *peer_cert, const char *subject)
   n = sk_X509_REVOKED_num(X509_CRL_get_REVOKED(crl));
   for (i = 0; i < n; i++) {
     revoked = (X509_REVOKED *)sk_X509_REVOKED_value(X509_CRL_get_REVOKED(crl), i);
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
     if (ASN1_INTEGER_cmp(revoked->serialNumber, X509_get_serialNumber(peer_cert)) == 0) {
-      serial = backend_x509_get_serial_hex(peer_cert, &gc);
+#else
+    if (ASN1_INTEGER_cmp(&revoked->serialNumber, X509_get_serialNumber(peer_cert)) == 0) {
+#endif
+	  serial = backend_x509_get_serial_hex(peer_cert, &gc);
       msg (D_HANDSHAKE, "CRL CHECK FAILED: %s (serial %s) is REVOKED", subject, (serial ? serial : "NOT AVAILABLE"));
       goto end;
     }

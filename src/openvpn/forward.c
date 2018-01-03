@@ -982,13 +982,14 @@ drop_if_recursive_routing (struct context *c, struct buffer *buf)
   bool drop = false;
   struct openvpn_sockaddr tun_sa;
   int ip_hdr_offset = 0;
+  int proto_ver;
 
   if (c->c2.to_link_addr == NULL) /* no remote addr known */
     return;
 
   tun_sa = c->c2.to_link_addr->dest;
 
-  int proto_ver = get_tun_ip_ver (TUNNEL_TYPE (c->c1.tuntap), &c->c2.buf, &ip_hdr_offset);
+  proto_ver = get_tun_ip_ver (TUNNEL_TYPE (c->c1.tuntap), &c->c2.buf, &ip_hdr_offset);
 
   if (proto_ver == 4)
     {
@@ -1156,7 +1157,6 @@ process_ip_header (struct context *c, unsigned int flags, struct buffer *buf)
 /*
  * Input: c->c2.to_link
  */
-
 void
 process_outgoing_link (struct context *c)
 {
@@ -1220,6 +1220,7 @@ process_outgoing_link (struct context *c)
 	    /* If Socks5 over UDP, prepend header */
 	    socks_preprocess_outgoing_link (c, &to_addr, &size_delta);
 #endif
+
 	    /* Send packet */
 	    size = link_socket_write (c->c2.link_socket,
 				      &c->c2.to_link,

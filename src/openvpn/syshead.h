@@ -560,7 +560,7 @@ socket_defined (const socket_descriptor_t sd)
  * Enable external private key
  */
 #if defined(ENABLE_MANAGEMENT) && defined(ENABLE_SSL)
-#define MANAGMENT_EXTERNAL_KEY
+//#define MANAGMENT_EXTERNAL_KEY
 #endif
 
 /* Enable PolarSSL RNG prediction resistance support */
@@ -639,7 +639,7 @@ socket_defined (const socket_descriptor_t sd)
  * Do we have CryptoAPI capability?
  */
 #if defined(WIN32) && defined(ENABLE_CRYPTO) && defined(ENABLE_SSL) && defined(ENABLE_CRYPTO_OPENSSL)
-#define ENABLE_CRYPTOAPI
+//#define ENABLE_CRYPTOAPI
 #endif
 
 /*

@@ -236,8 +236,8 @@ struct static_challenge_info {
 };
 
 #else
-struct auth_challenge_info {};
-struct static_challenge_info {};
+struct auth_challenge_info {char none;};
+struct static_challenge_info {char none;};
 #endif
 
 /*

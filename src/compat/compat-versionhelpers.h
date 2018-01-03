@@ -6,9 +6,9 @@
 #ifndef _INC_VERSIONHELPERS
 #define _INC_VERSIONHELPERS
 
-#include <winapifamily.h>
+//#include <winapifamily.h>
 
-#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP) && !defined(__WIDL__)
+//#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP) && !defined(__WIDL__)
 
 #ifdef __cplusplus
 #define VERSIONHELPERAPI inline bool
@@ -17,6 +17,7 @@
 #endif
 
 #define _WIN32_WINNT_WINBLUE    0x0603
+#define _WIN32_WINNT_WIN8    0x0602
 
 VERSIONHELPERAPI IsWindowsVersionOrGreater(WORD major, WORD minor, WORD servpack)
 {
@@ -77,5 +78,5 @@ VERSIONHELPERAPI IsWindowsServer(void) {
     return !VerifyVersionInfoW(&vi, VER_PRODUCT_TYPE, VerSetConditionMask(0, VER_PRODUCT_TYPE, VER_EQUAL));
 }
 
-#endif
+//#endif
 #endif

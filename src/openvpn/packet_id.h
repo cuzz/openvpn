@@ -50,7 +50,7 @@
  * to for network transmission.
  */
 typedef uint32_t packet_id_type;
-#define PACKET_ID_MAX UINT32_MAX
+#define PACKET_ID_MAX 0xFFFFFFFF
 typedef uint32_t net_time_t;
 
 /*
