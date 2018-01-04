@@ -275,13 +275,16 @@ bool
 packet_id_write (struct packet_id_send *p, struct buffer *buf, bool long_form,
         bool prepend)
 {
+  packet_id_type net_id;
+  net_time_t net_time;
+  
   if (!packet_id_send_update(p, long_form))
     {
       return false;
     }
 
-  const packet_id_type net_id = htonpid(p->id);
-  const net_time_t net_time = htontime(p->time);
+  net_id = htonpid(p->id);
+  net_time = htontime(p->time);
   if (prepend)
     {
       if (long_form)

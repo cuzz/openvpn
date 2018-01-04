@@ -15,7 +15,7 @@
 
 # ENABLE_CLIENT_ONLY removes server-side point-to-multipoint features. This
 # depends on ENABLE_CLIENT_SERVER being set to 1.
-!define ENABLE_CLIENT_ONLY 0
+!define ENABLE_CLIENT_ONLY 1
 
 !define ENABLE_MANAGEMENT 1
 !define ENABLE_HTTP_PROXY 1
@@ -38,9 +38,9 @@
 ;!define INCLUDE_PKCS11
 
 # Prebuilt libraries.  DMALLOC is optional.
-!define OPENSSL_DIR	  "../openssl"
-!define LZO_DIR		  "../lzo"
-!define PKCS11_HELPER_DIR "../pkcs11-helper"
+!define OPENSSL_DIR	  "../../openssl-1.0.2n"
+!define LZO_DIR		  "../../lzo-2.10"
+!define PKCS11_HELPER_DIR "../../pkcs11-helper-1.22"
 
 # write output files here
 !define DIST   "dist"
@@ -64,22 +64,25 @@
 ;!define PRODUCT_OPENVPN_DEBUG
 
 # DDK path -- currently Windows 7 WDK
-!define DDK_PATH "c:/winddk/7600.16385.1"
-;!define DDK_PATH "c:/winddk/6001.18002"
+!define DDK_PATH "d:/winddk/3790.1830"
+;!define DDK_PATH "d:/winddk/7600.16385.1"
+;!define DDK_PATH "d:/winddk/6001.18002"
 
 # output path for tap_span.py
 !define TAP_DIST "tap_dist"
 
 # Visual studio path
-!define MSVC "C:/Program Files/Microsoft Visual Studio 9.0"
+!define MSVC "D:/WinDDK/Microsoft Visual C++ Toolkit 2003"
+;!define MSVC "C:/Program Files/Microsoft Visual Studio 9.0"
 
 # Visual studio C run-time library path
-!define MSVC_CRT "../Microsoft.VC90.CRT"
+;!define MSVC_CRT "../Microsoft.VC90.CRT"
+!define MSVC_CRT "D:/WinDDK/Microsoft Visual C++ Toolkit 2003"
 
 # Code Signing.
 # If undefined, don't sign any files.
-!define SIGNTOOL        "../signtool"
-!define PRODUCT_SIGN_CN "openvpn"
+;!define SIGNTOOL        "../signtool"
+;!define PRODUCT_SIGN_CN "openvpn"
 
 # Directory with prebuilt TAP drivers and tapinstall.exes
 !define TAP_PREBUILT "../tap-prebuilt"

@@ -299,7 +299,7 @@ typedef unsigned long in_addr_t;
 #pragma warning(disable:4018) // signed/unsigned mismatch
 #include <io.h>
 #include <direct.h>
-//#define vsnprintf _vsnprintf
+#define vsnprintf _vsnprintf
 //#define vsnwprintf _vsnwprintf
 #define snwprintf _snwprintf
 #define write _write
