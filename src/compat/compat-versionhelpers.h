@@ -30,39 +30,39 @@ VERSIONHELPERAPI IsWindowsVersionOrGreater(WORD major, WORD minor, WORD servpack
 }
 
 VERSIONHELPERAPI IsWindowsXPOrGreater(void) {
-    return IsWindowsVersionOrGreater(HIBYTE(_WIN32_WINNT_WINXP), LOBYTE(_WIN32_WINNT_WINXP), 0);
+    return IsWindowsVersionOrGreater(HIBYTE(0x0501), LOBYTE(0x0501), 0);
 }
 
 VERSIONHELPERAPI IsWindowsXPSP1OrGreater(void) {
-    return IsWindowsVersionOrGreater(HIBYTE(_WIN32_WINNT_WINXP), LOBYTE(_WIN32_WINNT_WINXP), 1);
+    return IsWindowsVersionOrGreater(HIBYTE(0x0501), LOBYTE(0x0501), 1);
 }
 
 VERSIONHELPERAPI IsWindowsXPSP2OrGreater(void) {
-    return IsWindowsVersionOrGreater(HIBYTE(_WIN32_WINNT_WINXP), LOBYTE(_WIN32_WINNT_WINXP), 2);
+    return IsWindowsVersionOrGreater(HIBYTE(0x0501), LOBYTE(0x0501), 2);
 }
 
 VERSIONHELPERAPI IsWindowsXPSP3OrGreater(void) {
-    return IsWindowsVersionOrGreater(HIBYTE(_WIN32_WINNT_WINXP), LOBYTE(_WIN32_WINNT_WINXP), 3);
+    return IsWindowsVersionOrGreater(HIBYTE(0x0501), LOBYTE(0x0501), 3);
 }
 
 VERSIONHELPERAPI IsWindowsVistaOrGreater(void) {
-    return IsWindowsVersionOrGreater(HIBYTE(_WIN32_WINNT_VISTA), LOBYTE(_WIN32_WINNT_VISTA), 0);
+    return IsWindowsVersionOrGreater(HIBYTE(0x0600), LOBYTE(0x0600), 0);
 }
 
 VERSIONHELPERAPI IsWindowsVistaSP1OrGreater(void) {
-    return IsWindowsVersionOrGreater(HIBYTE(_WIN32_WINNT_VISTA), LOBYTE(_WIN32_WINNT_VISTA), 1);
+    return IsWindowsVersionOrGreater(HIBYTE(0x0600), LOBYTE(0x0600), 1);
 }
 
 VERSIONHELPERAPI IsWindowsVistaSP2OrGreater(void) {
-    return IsWindowsVersionOrGreater(HIBYTE(_WIN32_WINNT_VISTA), LOBYTE(_WIN32_WINNT_VISTA), 2);
+    return IsWindowsVersionOrGreater(HIBYTE(0x0600), LOBYTE(0x0600), 2);
 }
 
 VERSIONHELPERAPI IsWindows7OrGreater(void) {
-    return IsWindowsVersionOrGreater(HIBYTE(_WIN32_WINNT_WIN7), LOBYTE(_WIN32_WINNT_WIN7), 0);
+    return IsWindowsVersionOrGreater(HIBYTE(0x0601), LOBYTE(0x0601), 0);
 }
 
 VERSIONHELPERAPI IsWindows7SP1OrGreater(void) {
-    return IsWindowsVersionOrGreater(HIBYTE(_WIN32_WINNT_WIN7), LOBYTE(_WIN32_WINNT_WIN7), 1);
+    return IsWindowsVersionOrGreater(HIBYTE(0x0601), LOBYTE(0x0601), 1);
 }
 
 VERSIONHELPERAPI IsWindows8OrGreater(void) {

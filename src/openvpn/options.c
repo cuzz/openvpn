@@ -994,13 +994,13 @@ get_ipv6_addr( const char * prefix_str, struct in6_addr *network,
       }
 
     /* temporary replace '/' in caller-provided string with '\0', otherwise
-     * inet_pton() will refuse prefix string
+     * compat_inet_pton() will refuse prefix string
      * (alternative would be to strncpy() the prefix to temporary buffer)
      */
 
     if ( sep != NULL ) *sep = '\0';
 
-    if ( inet_pton( AF_INET6, prefix_str, &t_network ) != 1 )
+    if ( compat_inet_pton( AF_INET6, prefix_str, &t_network ) != 1 )
       {
 	msg (msglevel, "IPv6 prefix '%s': invalid IPv6 address", prefix_str);
 	return false;

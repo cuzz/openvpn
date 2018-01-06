@@ -50,7 +50,7 @@
 #define HAVE_ACCESS 1
 #define HAVE_CHDIR 1
 #define HAVE_CHSIZE 1
-#define HAVE_CPP_VARARG_MACRO_ISO 1
+//#define HAVE_CPP_VARARG_MACRO_ISO 1
 #define HAVE_CTIME 1
 #define HAVE_EVP_CIPHER_CTX_SET_KEY_LENGTH 1
 #define HAVE_IN_PKTINFO 1
@@ -93,6 +93,7 @@
 #define strncasecmp strnicmp
 #define strcasecmp _stricmp
 #define snprintf _snprintf
+#define vsnprintf _vsnprintf
 
 #if _MSC_VER < 1800
 #define strtoull strtoul
@@ -122,6 +123,14 @@ typedef __int64		int64_t;
 typedef __int32		int32_t;
 typedef __int16		int16_t;
 typedef __int8		int8_t;
+
+#ifndef SIZE_MAX
+#ifdef _WIN64 
+#define SIZE_MAX _UI64_MAX
+#else
+#define SIZE_MAX UINT_MAX
+#endif
+#endif
 
 #ifdef HAVE_CONFIG_MSVC_LOCAL_H
 #include <config-msvc-local.h>

@@ -356,7 +356,7 @@ ipv6_addr_safe (const char *ipv6_text_addr)
   /* verify that string will convert to IPv6 address */
   {
     struct in6_addr a6;
-    return inet_pton( AF_INET6, ipv6_text_addr, &a6 ) == 1;
+    return compat_inet_pton( AF_INET6, ipv6_text_addr, &a6 ) == 1;
   }
 }
 
@@ -2329,12 +2329,12 @@ const char *
 print_in6_addr (struct in6_addr a6, unsigned int flags, struct gc_arena *gc)
 {
   struct buffer out = alloc_buf_gc (64, gc);
-  char tmp_out_buf[64];		/* inet_ntop wants pointer to buffer */
+  char tmp_out_buf[64];		/* compat_inet_ntop wants pointer to buffer */
 
   if ( memcmp(&a6, &in6addr_any, sizeof(a6)) != 0 || 
        !(flags & IA_EMPTY_IF_UNDEF))
     {
-      inet_ntop (AF_INET6, &a6, tmp_out_buf, sizeof(tmp_out_buf)-1);
+      compat_inet_ntop (AF_INET6, &a6, tmp_out_buf, sizeof(tmp_out_buf)-1);
       buf_printf (&out, "%s", tmp_out_buf );
     }
   return BSTR (&out);

@@ -397,7 +397,7 @@ init_route_ipv6 (struct route_ipv6 *r6,
   /* gateway */
   if (is_route_parm_defined (r6o->gateway))
     {
-      if ( inet_pton( AF_INET6, r6o->gateway, &r6->gateway ) != 1 )
+      if ( compat_inet_pton( AF_INET6, r6o->gateway, &r6->gateway ) != 1 )
         {
 	  msg( M_WARN, PACKAGE_NAME "ROUTE6: cannot parse gateway spec '%s'", r6o->gateway );
         }
@@ -716,7 +716,7 @@ init_route_ipv6_list (struct route_ipv6_list *rl6,
 
   if ( is_route_parm_defined( remote_endpoint ))
     {
-      if ( inet_pton( AF_INET6, remote_endpoint, 
+      if ( compat_inet_pton( AF_INET6, remote_endpoint, 
 			&rl6->remote_endpoint_ipv6) == 1 )
         {
 	  rl6->remote_endpoint_defined = true;

@@ -34,6 +34,8 @@
 #include <openssl/hmac.h>
 #include <openssl/md5.h>
 
+#include "error.h"
+
 /** Generic cipher key type %context. */
 typedef EVP_CIPHER cipher_kt_t;
 
@@ -88,11 +90,26 @@ void crypto_print_openssl_errors(const unsigned int flags);
  * @param format	Format string to print.
  * @param format args	(optional) arguments for the format string.
  */
+#if _MSC_VER > 1500
 # define crypto_msg(flags, ...) \
 do { \
   crypto_print_openssl_errors(nonfatal(flags)); \
   msg((flags), __VA_ARGS__); \
 } while (false)
-
+#else
+#define crypto_msg
+/*
+void crypto_msg (const unsigned int flags, const char *format, ...)
+{
+do {
+  va_list arglist;
+  crypto_print_openssl_errors(nonfatal(flags));
+  va_start (arglist, format);
+  x_msg_va (flags, format, arglist);
+  va_end (arglist);
+} while (false);
+}
+*/
+#endif
 
 #endif /* CRYPTO_OPENSSL_H_ */

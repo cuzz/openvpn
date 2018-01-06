@@ -58,11 +58,11 @@ int daemon(int nochdir, int noclose);
 #endif
 
 #ifndef HAVE_INET_NTOP
-const char * inet_ntop(int af, const void *src, char *dst, socklen_t size);
+const char * compat_inet_ntop(int af, const void *src, char *dst, socklen_t size);
 #endif
 
 #ifndef HAVE_INET_PTON
-int inet_pton(int af, const char *src, void *dst);
+int compat_inet_pton(int af, const char *src, void *dst);
 #endif
 
 #endif /* COMPAT_H */

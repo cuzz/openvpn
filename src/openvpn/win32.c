@@ -55,7 +55,7 @@
 #endif
 
 /* WFP function pointers. Initialized in win_wfp_init_funcs() */
-func_ConvertInterfaceIndexToLuid ConvertInterfaceIndexToLuid = NULL;
+func_ConvertInterfaceIndexToLuid pfConvertInterfaceIndexToLuid = NULL;
 func_FwpmEngineOpen0 FwpmEngineOpen0 = NULL;
 func_FwpmEngineClose0 FwpmEngineClose0 = NULL;
 func_FwpmFilterAdd0 FwpmFilterAdd0 = NULL;
@@ -1091,7 +1091,7 @@ win_get_tempdir()
   static char tmpdir[MAX_PATH];
   WCHAR wtmpdir[MAX_PATH];
 
-  if (!GetTempPathW(_countof(wtmpdir), wtmpdir))
+  if (!GetTempPathW(MAX_PATH, wtmpdir))
     {
       /* Warn if we can't find a valid temporary directory, which should
        * be unlikely.
@@ -1133,7 +1133,7 @@ win_wfp_init_funcs ()
     return false;
   }
 
-  ConvertInterfaceIndexToLuid = (func_ConvertInterfaceIndexToLuid)GetProcAddress(iphlpapiHandle, "ConvertInterfaceIndexToLuid");
+  pfConvertInterfaceIndexToLuid = (func_ConvertInterfaceIndexToLuid)GetProcAddress(iphlpapiHandle, "ConvertInterfaceIndexToLuid");
   FwpmFilterAdd0 = (func_FwpmFilterAdd0)GetProcAddress(fwpuclntHandle, "FwpmFilterAdd0");
   FwpmEngineOpen0 = (func_FwpmEngineOpen0)GetProcAddress(fwpuclntHandle, "FwpmEngineOpen0");
   FwpmEngineClose0 = (func_FwpmEngineClose0)GetProcAddress(fwpuclntHandle, "FwpmEngineClose0");
@@ -1143,7 +1143,7 @@ win_wfp_init_funcs ()
   FwpmGetAppIdFromFileName0 = (func_FwpmGetAppIdFromFileName0)GetProcAddress(fwpuclntHandle, "FwpmGetAppIdFromFileName0");
   FwpmSubLayerGetByKey0 = (func_FwpmSubLayerGetByKey0) GetProcAddress(fwpuclntHandle, "FwpmSubLayerGetByKey0");
 
-  if (!ConvertInterfaceIndexToLuid ||
+  if (!pfConvertInterfaceIndexToLuid ||
       !FwpmFilterAdd0 ||
       !FwpmEngineOpen0 ||
       !FwpmEngineClose0 ||
@@ -1263,7 +1263,7 @@ win_wfp_block_dns (const NET_IFINDEX index)
     }
 
     dmsg (M_INFO, "Blocking DNS using WFP");
-    if (ConvertInterfaceIndexToLuid(index, &tapluid) != NO_ERROR)
+    if (pfConvertInterfaceIndexToLuid(index, &tapluid) != NO_ERROR)
     {
         msg (M_NONFATAL, "Can't convert interface index to LUID");
         goto err;
@@ -1271,8 +1271,8 @@ win_wfp_block_dns (const NET_IFINDEX index)
     dmsg (D_LOW, "Tap Luid: %I64d", tapluid.Value);
 
     /* Get OpenVPN path. */
-    status = GetModuleFileNameW(NULL, openvpnpath, _countof(openvpnpath));
-    if (status == 0 || status == _countof(openvpnpath))
+    status = GetModuleFileNameW(NULL, openvpnpath, MAX_PATH);
+    if (status == 0 || status == MAX_PATH)
     {
         msg(M_WARN|M_ERRNO, "block_dns: failed to get executable path");
         goto err;

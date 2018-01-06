@@ -38,7 +38,7 @@
 #include <string.h>
 
 /*
- * inet_ntop() and inet_pton() wrap-implementations using
+ * compat_inet_ntop() and compat_inet_pton() wrap-implementations using
  * WSAAddressToString() and WSAStringToAddress() functions
  *
  * this is needed as long as we support running OpenVPN on WinXP
@@ -46,7 +46,7 @@
 
 
 int
-inet_pton(int af, const char *src, void *dst)
+compat_inet_pton(int af, const char *src, void *dst)
 {
   struct sockaddr_storage ss;
   int size = sizeof(ss);
@@ -72,7 +72,7 @@ inet_pton(int af, const char *src, void *dst)
 
 #else
 
-#error no emulation for inet_ntop
+#error no emulation for compat_inet_ntop
 
 #endif
 

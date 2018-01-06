@@ -551,8 +551,8 @@ init_tun (const char *dev,       /* --dev option */
        * Convert arguments to binary IPv6 addresses.
        */
 
-      if ( inet_pton( AF_INET6, ifconfig_ipv6_local_parm, &tt->local_ipv6 ) != 1 ||
-           inet_pton( AF_INET6, ifconfig_ipv6_remote_parm, &tt->remote_ipv6 ) != 1 ) 
+      if ( compat_inet_pton( AF_INET6, ifconfig_ipv6_local_parm, &tt->local_ipv6 ) != 1 ||
+           compat_inet_pton( AF_INET6, ifconfig_ipv6_remote_parm, &tt->remote_ipv6 ) != 1 ) 
 	{
 	  msg( M_FATAL, "init_tun: problem converting IPv6 ifconfig addresses %s and %s to binary", ifconfig_ipv6_local_parm, ifconfig_ipv6_remote_parm );
 	}
